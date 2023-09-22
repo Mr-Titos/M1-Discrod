@@ -1,12 +1,16 @@
 package fr.discrod.discrod.requestModeles;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class AuthRequest {
+public class ChannelRequest {
+    private String id;
+
     @NotBlank
-    private String username;
+    private String guild;
+
     @NotBlank
-    private String password;
+    private String channelTypeName;
 }

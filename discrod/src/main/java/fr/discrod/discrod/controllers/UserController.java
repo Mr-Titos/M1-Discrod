@@ -1,6 +1,6 @@
 package fr.discrod.discrod.controllers;
 
-import fr.discrod.discrod.exceptions.ItemNotCompleteException;
+import fr.discrod.discrod.exceptions.ItemNotValidException;
 import fr.discrod.discrod.exceptions.ItemNotFoundException;
 import fr.discrod.discrod.modeles.UserModel;
 import fr.discrod.discrod.repositories.UserRepository;
@@ -9,6 +9,7 @@ import fr.discrod.discrod.requestModeles.SubscriptionRequest;
 import fr.discrod.discrod.requestModeles.UserRequest;
 import fr.discrod.discrod.responseModeles.UserResponse;
 import fr.discrod.discrod.security.JwtUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +18,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/user")
 public class UserController {
     @Autowired
@@ -36,7 +38,10 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/subscribe")
-    public String subscribe(@RequestBody SubscriptionRequest request) {
+    public String subscribe(@Validated @RequestBody SubscriptionRequest request, BindingResult errors) {
+        if (errors.hasErrors())
+            throw new ItemNotValidException();
+
         if (!request.getEmail().isEmpty()
                 && !request.getPassword().isEmpty()
                 && !request.getUsername().isEmpty()) {
@@ -50,13 +55,15 @@ public class UserController {
 
             return userModel.getId();
         } else {
-            throw new ItemNotCompleteException();
+            throw new ItemNotValidException();
         }
 
     }
 
     @PostMapping("/auth")
-    public String auth(@RequestBody AuthRequest request) {
+    public String auth(@Validated @RequestBody AuthRequest request, BindingResult errors) {
+        if (errors.hasErrors())
+            throw new ItemNotValidException();
         // We're letting SPRING SECURITY doing the work
         try {
             Authentication authentication = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
@@ -86,7 +93,10 @@ public class UserController {
     }
 
     @PutMapping()
-    public UserResponse update(@RequestBody UserRequest itemRequest) {
+    public UserResponse update(@Valid @RequestBody UserRequest itemRequest, BindingResult errors) {
+        if(errors.hasErrors()) {
+            throw new ItemNotValidException();
+        }
         var item = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
         if (repository.findById(itemRequest.getId()).isPresent()) {
             UserModel newItem = new UserModel();
@@ -98,7 +108,10 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse create(@RequestBody UserRequest userRequest) {
+    public UserResponse create(@Valid @RequestBody UserRequest userRequest, BindingResult errors) {
+        if(errors.hasErrors()) {
+            throw new ItemNotValidException();
+        }
         UserModel userModel = new UserModel();
         BeanUtils.copyProperties(userRequest, userModel);
         repository.save(userModel);
