@@ -1,5 +1,6 @@
 package fr.discrod.discrod.controllers;
 
+import fr.discrod.discrod.exceptions.ItemNotCompleteException;
 import fr.discrod.discrod.exceptions.ItemNotFoundException;
 import fr.discrod.discrod.modeles.UserModel;
 import fr.discrod.discrod.repositories.UserRepository;
@@ -49,7 +50,7 @@ public class UserController {
 
             return userModel.getId();
         } else {
-            return new
+            throw new ItemNotCompleteException();
         }
 
     }
