@@ -1,42 +1,45 @@
 package fr.discrod.discrod.modeles;
 
+import fr.discrod.discrod.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "[user]")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private String id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
+
+    private Role role = Role.USER;
 
     @Column(unique = true)
     private String email;
 
     @ManyToMany
-    private List<User> friends = new ArrayList<>();
+    private List<UserModel> friends = new ArrayList<>();
 
-    public void addFriend(User u) {
+    public void addFriend(UserModel u) {
         if (this.friends == null) {
             this.friends = new ArrayList<>();
         }
         this.friends.add(u);
     }
 
-    public void removeFriend(User u) {
+    public void removeFriend(UserModel u) {
         if (this.friends == null) {
             this.friends = new ArrayList<>();
         }

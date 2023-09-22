@@ -1,9 +1,10 @@
 package fr.discrod.discrod.repositories;
 
-import fr.discrod.discrod.modeles.User;
+import fr.discrod.discrod.modeles.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<UserModel, String> {
+    Optional<UserModel> findByUsername(String username);
 }

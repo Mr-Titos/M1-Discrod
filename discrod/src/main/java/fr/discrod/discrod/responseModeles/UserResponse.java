@@ -1,6 +1,7 @@
 package fr.discrod.discrod.responseModeles;
 
-import fr.discrod.discrod.modeles.User;
+import fr.discrod.discrod.enums.Role;
+import fr.discrod.discrod.modeles.UserModel;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -10,25 +11,26 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class UserResponse {
-    private long id;
+    private String id;
     private String username;
     private String email;
-    private List<UserResponse> friends = new ArrayList<>();
+    private Role role;
+    private List<UserMinResponse> friends = new ArrayList<>();
 
-    public UserResponse(User user) {
-        this.setId(user.getId());
-        this.setUsername(user.getUsername());
-        this.setEmail(user.getEmail());
-        this.setFriends(BuildFriendResponse(user.getFriends()));
+    public UserResponse(UserModel userModel) {
+        this.setId(userModel.getId());
+        this.setUsername(userModel.getUsername());
+        this.setEmail(userModel.getEmail());
+        this.setRole(userModel.getRole());
+        this.setFriends(BuildFriendResponse(userModel.getFriends()));
     }
-    private static List<UserResponse> BuildFriendResponse(List<User> users) {
-        List<UserResponse> userResponses = new ArrayList<>();
-        users.forEach(u -> {
-            UserResponse ur = new UserResponse();
+    private static List<UserMinResponse> BuildFriendResponse(List<UserModel> userModels) {
+        List<UserMinResponse> userResponses = new ArrayList<>();
+        userModels.forEach(u -> {
+            UserMinResponse ur = new UserMinResponse();
             ur.setId(u.getId());
             ur.setEmail(u.getEmail());
             ur.setUsername(u.getUsername());
-            ur.setFriends(null);
             userResponses.add(ur);
         });
         return userResponses;
