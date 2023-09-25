@@ -1,0 +1,26 @@
+/* Styles pour la barre latérale principale */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20%; /* Largeur totale de la sidebar */
+    height: 100%; /* Remplit la hauteur de l'écran */
+    display: flex;
+  }
+  
+  /* Styles pour la première barre latérale (20%) */
+  .sidebar-left {
+    width: 10%;
+    background-color: #1e1f22; /* Couleur de fond de la première sidebar */
+    color: white;
+    padding: 20px; /* Espacement interne pour le contenu */
+  }
+  
+  /* Styles pour la deuxième barre latérale (70%) */
+  .sidebar-right {
+    width: 90%;
+    background-color: #2b2d31; /* Couleur de fond de la deuxième sidebar */
+    color: white;
+    padding: 20px; /* Espacement interne pour le contenu */
+  }
+  

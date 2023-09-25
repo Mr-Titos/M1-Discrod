@@ -1,23 +1,26 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react';
+import MessageSaisie from './component/Message/MessageSaisie';
+import MessageListe from './component/Message/MessageListe';
+import Sidebar from './component/Sidebar/Sidebar'; 
 
 function App() {
+
+  const [messages, setMessages] = useState([]);
+
+  const handleMessageSubmit = (message) => {
+    setMessages([...messages, message]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      {/*sidebar*/}
+      <div className="content">
+        <h1>Messages</h1>
+        <MessageSaisie onMessageSubmit={handleMessageSubmit} />
+        <MessageListe messages={messages} />
+      </div>
     </div>
   );
 }
