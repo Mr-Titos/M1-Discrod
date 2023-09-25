@@ -5,12 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ChannelRequest {
+public class GuildRequest {
     private String id;
 
     @NotBlank
     private String name;
-
-    @NotBlank
-    private String channelTypeName;
 }

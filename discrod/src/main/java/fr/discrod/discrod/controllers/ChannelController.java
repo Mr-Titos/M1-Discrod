@@ -39,31 +39,27 @@ public class ChannelController {
     }
 
     @GetMapping("/{id}/{text}")
-    public ChannelResponse getAllFiltered(@PathVariable String id, @PathVariable String text) {
+    public ChannelResponse getAllFilteredText(@PathVariable String id, @PathVariable String text) {
         ChannelModel item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         List<MessageModel> itemFiltered = messageRepository.findAllByTextContaining(text).orElse(new ArrayList<>());
-        item.setMessageModel(itemFiltered);
+        item.setMessageModels(itemFiltered);
         return new ChannelResponse(item);
     }
     @PutMapping()
     public ChannelResponse update(@Validated @RequestBody ChannelRequest itemRequest, BindingResult errors) {
-        if(errors.hasErrors()) {
-            throw new ItemNotValidException();
-        }
+        ResolveErrors(errors);
+
         var item = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
-        if (repository.findById(itemRequest.getId()).isPresent()) {
-            ChannelModel newItem = new ChannelModel();
-            BeanUtils.copyProperties(itemRequest, newItem);
-            item = repository.save(newItem);
-        }
+        ChannelModel newItem = new ChannelModel();
+        BeanUtils.copyProperties(itemRequest, newItem);
+        item = repository.save(newItem);
         return new ChannelResponse(item);
     }
 
     @PostMapping
     public ChannelResponse create(@Validated @RequestBody ChannelRequest itemRequest, BindingResult errors) {
-        if(errors.hasErrors()) {
-            throw new ItemNotValidException();
-        }
+        ResolveErrors(errors);
+
         var item = new ChannelModel();
         try {
             item.setChannelType(ChannelType.valueOf(itemRequest.getChannelTypeName().toUpperCase()));
@@ -71,7 +67,7 @@ public class ChannelController {
             throw new ItemNotValidException();
         }
         BeanUtils.copyProperties(itemRequest, item);
-        item.setMessageModel(new ArrayList<>());
+        item.setMessageModels(new ArrayList<>());
         repository.save(item);
         return new ChannelResponse(item);
     }
@@ -80,5 +76,10 @@ public class ChannelController {
     public void delete(@PathVariable String id) {
         var item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         repository.delete(item);
+    }
+
+    private void ResolveErrors(BindingResult errors) {
+        if(errors.hasErrors())
+            throw new ItemNotValidException();
     }
 }

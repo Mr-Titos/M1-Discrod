@@ -1,8 +1,11 @@
 package fr.discrod.discrod.repositories;
 
 import fr.discrod.discrod.modeles.ChannelModel;
+import fr.discrod.discrod.modeles.GuildModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ChannelRepository extends JpaRepository<ChannelModel, String> {
+import java.util.List;
 
+public interface ChannelRepository extends JpaRepository<ChannelModel, String> {
+    List<ChannelModel> findAllByGuild(GuildModel guildModel);
 }

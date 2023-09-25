@@ -1,6 +1,5 @@
 package fr.discrod.discrod.modeles;
 
-import fr.discrod.discrod.enums.ChannelType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -12,18 +11,17 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChannelModel {
+@Table(name="guild")
+public class GuildModel {
     @Id
     @UuidGenerator
     private String id;
 
     private String name;
 
-    private ChannelType channelType;
+    @ManyToMany(mappedBy = "guilds")
+    private List<UserModel> users;
 
-    @OneToMany
-    private List<MessageModel> messageModels;
-
-    @ManyToOne
-    private GuildModel guild;
+    @OneToMany(mappedBy = "guild")
+    private List<ChannelModel> channels;
 }

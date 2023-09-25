@@ -1,11 +1,14 @@
 package fr.discrod.discrod.controllers;
 
-import fr.discrod.discrod.exceptions.ItemNotValidException;
+import fr.discrod.discrod.enums.Role;
+import fr.discrod.discrod.exceptions.FriendAlreadyInListException;
 import fr.discrod.discrod.exceptions.ItemNotFoundException;
+import fr.discrod.discrod.exceptions.ItemNotValidException;
 import fr.discrod.discrod.modeles.UserModel;
 import fr.discrod.discrod.repositories.UserRepository;
 import fr.discrod.discrod.requestModeles.AuthRequest;
 import fr.discrod.discrod.requestModeles.SubscriptionRequest;
+import fr.discrod.discrod.requestModeles.UserMinRequest;
 import fr.discrod.discrod.requestModeles.UserRequest;
 import fr.discrod.discrod.responseModeles.UserResponse;
 import fr.discrod.discrod.security.JwtUtils;
@@ -39,8 +42,7 @@ public class UserController {
 
     @PostMapping("/subscribe")
     public String subscribe(@Validated @RequestBody SubscriptionRequest request, BindingResult errors) {
-        if (errors.hasErrors())
-            throw new ItemNotValidException();
+        ResolveErrors(errors);
 
         if (!request.getEmail().isEmpty()
                 && !request.getPassword().isEmpty()
@@ -62,9 +64,8 @@ public class UserController {
 
     @PostMapping("/auth")
     public String auth(@Validated @RequestBody AuthRequest request, BindingResult errors) {
-        if (errors.hasErrors())
-            throw new ItemNotValidException();
-        // We're letting SPRING SECURITY doing the work
+        ResolveErrors(errors);
+                // We're letting SPRING SECURITY doing the work
         try {
             Authentication authentication = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
 
@@ -94,9 +95,8 @@ public class UserController {
 
     @PutMapping()
     public UserResponse update(@Valid @RequestBody UserRequest itemRequest, BindingResult errors) {
-        if(errors.hasErrors()) {
-            throw new ItemNotValidException();
-        }
+        ResolveErrors(errors);
+
         var item = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
         if (repository.findById(itemRequest.getId()).isPresent()) {
             UserModel newItem = new UserModel();
@@ -109,11 +109,15 @@ public class UserController {
 
     @PostMapping
     public UserResponse create(@Valid @RequestBody UserRequest userRequest, BindingResult errors) {
-        if(errors.hasErrors()) {
-            throw new ItemNotValidException();
-        }
+        ResolveErrors(errors);
+
         UserModel userModel = new UserModel();
         BeanUtils.copyProperties(userRequest, userModel);
+        userModel.setFriends(new ArrayList<>());
+        userModel.setGuilds(new ArrayList<>());
+        if(userModel.getRole() == null) {
+          userModel.setRole(Role.USER);
+        }
         repository.save(userModel);
         return new UserResponse(userModel);
     }
@@ -122,5 +126,35 @@ public class UserController {
     public void delete(@PathVariable String id) {
         UserModel userModel = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         repository.delete(userModel);
+    }
+
+    @PostMapping("/friends/{id}")
+    public void addFriend(@Validated @RequestBody UserMinRequest itemRequest, @PathVariable String id, BindingResult errors) {
+        ResolveErrors(errors);
+
+        var item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+        var itemUser = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
+        if (item.getFriends().contains(itemUser))
+            throw new FriendAlreadyInListException();
+        if (itemUser == item)
+            throw new RuntimeException("Nice try");
+
+        itemUser.getFriends().add(item);
+        repository.save(item);
+    }
+
+    @DeleteMapping("/friends/{id}")
+    public void removeFriend(@Validated @RequestBody UserMinRequest itemRequest, @PathVariable String id, BindingResult errors) {
+        ResolveErrors(errors);
+
+        var item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+        var itemUser = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
+        itemUser.getFriends().remove(item);
+        repository.save(item);
+    }
+
+    private void ResolveErrors(BindingResult errors) {
+        if(errors.hasErrors())
+            throw new ItemNotValidException();
     }
 }

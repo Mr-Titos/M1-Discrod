@@ -39,28 +39,24 @@ public class MessageController {
 
     @PutMapping()
     public MessageResponse update(@Validated @RequestBody MessageRequest itemRequest, BindingResult errors) {
-        if(errors.hasErrors()) {
-            throw new ItemNotValidException();
-        }
-        var item = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
-        if (repository.findById(itemRequest.getId()).isPresent()) {
-            MessageModel newItem = new MessageModel();
-            BeanUtils.copyProperties(itemRequest, newItem);
-            item = repository.save(newItem);
-        }
+        ResolveErrors(errors);
 
+        var item = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
+        UserModel userModel = userRepository.findById(itemRequest.getSender_id()).orElseThrow(ItemNotFoundException::new);
+        item.setSender(userModel);
+        MessageModel newItem = new MessageModel();
+        BeanUtils.copyProperties(itemRequest, newItem);
+        item = repository.save(newItem);
         return new MessageResponse(item);
     }
 
     @PostMapping
     public MessageResponse create(@Validated @RequestBody MessageRequest itemRequest,  BindingResult errors) {
-        if(errors.hasErrors()) {
-            throw new ItemNotValidException();
-        }
+        ResolveErrors(errors);
+
         MessageModel item = new MessageModel();
         BeanUtils.copyProperties(itemRequest, item);
-        UserModel userModel = userRepository.findById(itemRequest.getSender().getId())
-                .orElseThrow(ItemNotFoundException::new);
+        UserModel userModel = userRepository.findById(itemRequest.getSender_id()).orElseThrow(ItemNotFoundException::new);
         item.setSender(userModel);
         repository.save(item);
         return new MessageResponse(item);
@@ -70,5 +66,10 @@ public class MessageController {
     public void delete(@PathVariable String id) {
         MessageModel item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         repository.delete(item);
+    }
+
+    private void ResolveErrors(BindingResult errors) {
+        if(errors.hasErrors())
+            throw new ItemNotValidException();
     }
 }

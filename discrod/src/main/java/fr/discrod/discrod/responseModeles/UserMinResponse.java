@@ -13,11 +13,9 @@ import lombok.Setter;
 public class UserMinResponse {
     private String id;
     private String username;
-    private String email;
 
     public UserMinResponse(UserModel userModel) {
         this.setId(userModel.getId());
         this.setUsername(userModel.getUsername());
-        this.setEmail(userModel.getEmail());
     }
 }

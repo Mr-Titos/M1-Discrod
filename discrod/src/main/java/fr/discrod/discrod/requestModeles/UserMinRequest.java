@@ -4,13 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+// Template for user add
 @Getter @Setter
-public class ChannelRequest {
+public class UserMinRequest {
+    @NotBlank
     private String id;
-
-    @NotBlank
-    private String name;
-
-    @NotBlank
-    private String channelTypeName;
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,19 +29,8 @@ public class UserModel {
     private String email;
 
     @ManyToMany
-    private List<UserModel> friends = new ArrayList<>();
+    private List<UserModel> friends;
 
-    public void addFriend(UserModel u) {
-        if (this.friends == null) {
-            this.friends = new ArrayList<>();
-        }
-        this.friends.add(u);
-    }
-
-    public void removeFriend(UserModel u) {
-        if (this.friends == null) {
-            this.friends = new ArrayList<>();
-        }
-        this.friends.remove(u);
-    }
+    @ManyToMany
+    private List<GuildModel> guilds;
 }

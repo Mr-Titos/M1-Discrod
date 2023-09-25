@@ -1,6 +1,5 @@
 package fr.discrod.discrod.requestModeles;
 
-import fr.discrod.discrod.modeles.UserModel;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,5 +10,5 @@ public class MessageRequest {
     @NotBlank
     private String text;
     @NotBlank
-    private UserModel sender;
+    private String sender_id;
 }

@@ -4,13 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+// Template for user add in guild
 @Getter @Setter
-public class ChannelRequest {
+public class ChannelGuildRequest {
+    @NotBlank
     private String id;
-
-    @NotBlank
-    private String name;
-
-    @NotBlank
-    private String channelTypeName;
 }

@@ -29,7 +29,6 @@ public class UserResponse {
         userModels.forEach(u -> {
             UserMinResponse ur = new UserMinResponse();
             ur.setId(u.getId());
-            ur.setEmail(u.getEmail());
             ur.setUsername(u.getUsername());
             userResponses.add(ur);
         });
