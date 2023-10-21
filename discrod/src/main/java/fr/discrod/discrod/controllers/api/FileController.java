@@ -1,9 +1,10 @@
-package fr.discrod.discrod.controllers;
+package fr.discrod.discrod.controllers.api;
 
 import fr.discrod.discrod.exceptions.ItemNotFoundException;
 import fr.discrod.discrod.exceptions.ItemNotValidException;
 import fr.discrod.discrod.modeles.GuildModel;
 import fr.discrod.discrod.repositories.ChannelRepository;
+import fr.discrod.discrod.repositories.FileRepository;
 import fr.discrod.discrod.repositories.GuildRepository;
 import fr.discrod.discrod.repositories.UserRepository;
 import fr.discrod.discrod.requestModeles.ChannelGuildRequest;
@@ -21,16 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/guild")
-public class GuildController {
+@RequestMapping("/api/file")
+public class FileController {
     @Autowired
-    private GuildRepository repository;
-
-    @Autowired
-    private ChannelRepository channelRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private FileRepository repository;
 
     @GetMapping("/{id}")
     public GuildResponse get(@PathVariable String id) {

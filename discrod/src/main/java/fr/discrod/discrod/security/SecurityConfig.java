@@ -27,6 +27,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorization -> {
             authorization.requestMatchers("/api/user/subscribe").permitAll();
             authorization.requestMatchers("/api/user/auth").permitAll();
+            authorization.requestMatchers("/hello").permitAll();
             // TODO : authorization.requestMatchers("/api/message/**").hasRole(Role.ADMIN.name());
             authorization.requestMatchers("/**").authenticated();
         });

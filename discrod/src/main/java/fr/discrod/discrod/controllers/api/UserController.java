@@ -1,4 +1,4 @@
-package fr.discrod.discrod.controllers;
+package fr.discrod.discrod.controllers.api;
 
 import fr.discrod.discrod.enums.Role;
 import fr.discrod.discrod.exceptions.FriendAlreadyInListException;
@@ -149,7 +149,7 @@ public class UserController {
 
         var item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         var itemUser = repository.findById(itemRequest.getId()).orElseThrow(ItemNotFoundException::new);
-        itemUser.getFriends().remove(item);
+        item.getFriends().remove(itemUser);
         repository.save(item);
     }
 

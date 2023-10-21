@@ -1,4 +1,4 @@
-package fr.discrod.discrod.controllers;
+package fr.discrod.discrod.controllers.api;
 
 import fr.discrod.discrod.exceptions.ItemNotFoundException;
 import fr.discrod.discrod.exceptions.ItemNotValidException;
