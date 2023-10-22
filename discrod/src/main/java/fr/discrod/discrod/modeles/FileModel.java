@@ -19,6 +19,8 @@ public class FileModel {
     @JoinColumn(name = "owner_id")
     private UserModel owner;
 
+    private String name;
+
     private FileType type;
 
     @Lob

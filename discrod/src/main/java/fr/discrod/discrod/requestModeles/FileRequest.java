@@ -13,5 +13,7 @@ public class FileRequest {
     @NotBlank
     private String owner_id;
     @NotBlank
+    private String name;
+    @NotBlank
     private byte[] data;
 }
