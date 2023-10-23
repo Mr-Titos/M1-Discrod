@@ -91,6 +91,13 @@ public class UserController {
         UserModel usr = repository.findById(id).orElseThrow(ItemNotFoundException::new);
         return new UserResponse(usr);
     }
+
+    @GetMapping("/name/{username}")
+    public UserResponse getByName(@PathVariable String username) {
+        UserModel usr = repository.findByUsername(username).orElseThrow(ItemNotFoundException::new);
+        return new UserResponse(usr);
+    }
+
     @GetMapping
     public List<UserResponse> getAll() {
         List<UserResponse> response = new ArrayList<>();
