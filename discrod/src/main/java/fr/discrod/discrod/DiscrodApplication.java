@@ -10,6 +10,7 @@ public class DiscrodApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DiscrodApplication.class, args);
+
 	}
 
 }

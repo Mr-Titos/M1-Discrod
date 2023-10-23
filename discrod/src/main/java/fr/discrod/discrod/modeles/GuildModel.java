@@ -6,6 +6,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 
+// Fonction non implémentée en front
 @Entity
 @Data
 @Getter @Setter

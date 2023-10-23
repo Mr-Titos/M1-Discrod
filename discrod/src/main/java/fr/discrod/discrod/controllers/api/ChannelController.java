@@ -38,6 +38,8 @@ public class ChannelController {
         return item;
     }
 
+    // Fonction filtrer les message dans un channel spécifique !
+    // Non implémenter en front par "manque de temps"
     @GetMapping("/{id}/{text}")
     public ChannelResponse getAllFilteredText(@PathVariable String id, @PathVariable String text) {
         ChannelModel item = repository.findById(id).orElseThrow(ItemNotFoundException::new);

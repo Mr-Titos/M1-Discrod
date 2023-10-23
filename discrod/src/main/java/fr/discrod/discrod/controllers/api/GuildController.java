@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Fonction multi serveur non implémentée
 @RestController
 @RequestMapping("/api/guild")
 public class GuildController {
