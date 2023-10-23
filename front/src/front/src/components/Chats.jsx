@@ -22,6 +22,10 @@ const Chats = () => {
 
     }, []);
 
+    function onclick(id){
+        localStorage.setItem("channelID", id);
+    }
+
     return(
         <div className="chats">
         {chats && chats.length > 0 ? (
@@ -35,7 +39,7 @@ const Chats = () => {
                 }
     
                 return (
-                    <div className="userChat" key={element.id} onClick="">
+                    <div className="userChat" key={element.id} onClick={onclick(element.id)}>
                         <img src={channelTypeImage} alt="" />
                         <div className="userChatInfo">
                             <span>{element.name}</span>

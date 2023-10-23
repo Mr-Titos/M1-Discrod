@@ -10,14 +10,14 @@ const Message = ({message}) => {
       }, [message]);
 
     return(
-        <div className="message owner">
+        <div className="message owner"> 
             <div className="messageInfo">
                 <img src={Img} alt="" />
                 <span>A l'instant</span>
             </div>
             <div className="messageContent">
-                <p>hello</p>
-                <img src="" alt="" />
+                <p>{message}</p>
+                <img src="" alt="" /> 
             </div>
         </div>
     )
