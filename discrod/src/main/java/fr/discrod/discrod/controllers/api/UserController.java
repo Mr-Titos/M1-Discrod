@@ -63,21 +63,26 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public String auth(@Validated @RequestBody AuthRequest request, BindingResult errors) {
+    public UserResponse auth(@Validated @RequestBody AuthRequest request, BindingResult errors) {
         ResolveErrors(errors);
-                // We're letting SPRING SECURITY doing the work
-        try {
+
+            try {
             Authentication authentication = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
 
             authentication = this.authenticationManager.authenticate(authentication);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return JwtUtils.generate(request.getUsername());
+
+            String token = JwtUtils.generate(request.getUsername());
+            UserModel user = this.repository.findByUsername(request.getUsername()).orElseThrow(ItemNotFoundException::new);
+            UserResponse userResponse = new UserResponse(user);
+            userResponse.setToken(token);
+            return userResponse;
         }
 
         catch (BadCredentialsException e) {
-            return e.getMessage();
+            throw new ItemNotValidException();
         }
     }
 

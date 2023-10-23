@@ -29,7 +29,6 @@ public class SecurityConfig {
             authorization.requestMatchers("/api/user/auth").permitAll();
             authorization.requestMatchers("/api/file/{idFile}").permitAll();
 
-            // TODO : authorization.requestMatchers("/api/message/**").hasRole(Role.ADMIN.name());
             authorization.requestMatchers("/**").authenticated();
         });
 

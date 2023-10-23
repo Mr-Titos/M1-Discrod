@@ -9,7 +9,6 @@ import java.util.Date;
 
 public class JwtUtils {
     private static final String KEY = "19D6IjLAudjoZMxFHnp/Owq2SKapi7JRqGhUo82TrAMF9JBz7ATG4SnDLulvQqI2";
-    //private static final String KEY = RandomStringUtils.randomAlphanumeric(64);
 
     private JwtUtils() { }
 

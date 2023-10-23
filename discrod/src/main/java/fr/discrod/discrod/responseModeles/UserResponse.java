@@ -16,6 +16,7 @@ public class UserResponse {
     private String email;
     private Role role;
     private List<UserMinResponse> friends = new ArrayList<>();
+    private String token = null;
 
     public UserResponse(UserModel userModel) {
         this.setId(userModel.getId());
