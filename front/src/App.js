@@ -1,27 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { useState } from 'react';
-import MessageSaisie from './component/Message/MessageSaisie';
-import MessageListe from './component/Message/MessageListe';
-import Sidebar from './component/Sidebar/Sidebar'; 
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./style.scss";
 
 function App() {
 
-  const [messages, setMessages] = useState([]);
-
-  const handleMessageSubmit = (message) => {
-    setMessages([...messages, message]);
-  };
-
   return (
-    <div className="app">
-      {/*sidebar*/}
-      <div className="content">
-        <h1>Messages</h1>
-        <MessageSaisie onMessageSubmit={handleMessageSubmit} />
-        <MessageListe messages={messages} />
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home/>} />
+          <Route path="login" element={<Login/>} />
+          <Route path="register" element={<Register/>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
