@@ -8,6 +8,7 @@ import fr.discrod.discrod.modeles.MessageModel;
 import fr.discrod.discrod.repositories.ChannelRepository;
 import fr.discrod.discrod.repositories.MessageRepository;
 import fr.discrod.discrod.requestModeles.ChannelRequest;
+import fr.discrod.discrod.requestModeles.MessageRequest;
 import fr.discrod.discrod.responseModeles.ChannelResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,19 @@ public class ChannelController {
         item.setMessageModels(new ArrayList<>());
         repository.save(item);
         return new ChannelResponse(item);
+    }
+
+    @PostMapping("/channel/message/{id}")
+    public void addMessage(@Validated @RequestBody MessageRequest itemRequest, @PathVariable String id, BindingResult errors) {
+        ResolveErrors(errors);
+
+        var item = repository.findById(id).orElseThrow(ItemNotFoundException::new);
+
+        MessageModel itemMessage = new MessageModel();
+        BeanUtils.copyProperties(itemRequest, itemMessage);
+        messageRepository.save(itemMessage);
+        item.getMessageModels().add(itemMessage);
+        repository.save(item);
     }
 
     @DeleteMapping("/{id}")
